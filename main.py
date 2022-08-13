@@ -78,9 +78,9 @@ async def claim(ctx,username=''):
     user = await User.find_one({"user_id": ctx.author.id})
     if user is not None:
         if user.user_status == 0:
-            await ctx.send(f"Hello <@{ctx.author.id}>. You already claimed {username} which is pending for registeration")
+            await ctx.send(f"Hello <@{ctx.author.id}>. You already claimed {user.user_name} which is pending for registeration")
         else:
-            await ctx.send(f"Hello <@{ctx.author.id}>. You already claimed {username}. You can not claim more accounts")
+            await ctx.send(f"Hello <@{ctx.author.id}>. You already claimed {user.user_name}. You can not claim more accounts")
         
         return
     # get activation token
