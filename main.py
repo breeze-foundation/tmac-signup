@@ -102,6 +102,7 @@ async def claim(ctx,username=''):
     
     # DM user token
     discord_user = await client.fetch_user(ctx.author.id)
+    await ctx.send(f"Hello <@{ctx.author.id}>. token has been sent via DM")
     await discord_user.send(f'Hello <@{ctx.author.id}>. \nHere is your activation token {activation_token}')
 
 @client.event
