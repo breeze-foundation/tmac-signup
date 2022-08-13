@@ -71,16 +71,16 @@ async def claim(ctx,username=''):
 
     # check if username is already taken or not
     if is_username_taken(username) == True:
-        await ctx.send(f"Hello <@{ctx.author.id}>. Username exists. Please choose another username")
+        await ctx.send(f"Hello <@{ctx.author.id}>. This username `{username}` is already registered. Please choose another username")
         return
     
     # Check against the db
     user = await User.find_one({"user_id": ctx.author.id})
     if user is not None:
         if user.user_status == 0:
-            await ctx.send(f"Hello <@{ctx.author.id}>. You already claimed {user.user_name} which is pending for registeration")
+            await ctx.send(f"Hello <@{ctx.author.id}>. You have already claimed `{user.user_name}` which is pending for registeration")
         else:
-            await ctx.send(f"Hello <@{ctx.author.id}>. You already claimed {user.user_name}. You can not claim more accounts")
+            await ctx.send(f"Hello <@{ctx.author.id}>. You have already claimed `{user.user_name}`. You can not claim more accounts")
         
         return
       
@@ -113,7 +113,7 @@ async def on_ready():
 @client.event
 async def on_command_error(ctx, error):
     if isinstance(error, CommandNotFound):
-        await ctx.send(f"Hello <@{ctx.author.id}>. Wrong command. Please use !help to get list of supported commands")
+        await ctx.send(f"Hello <@{ctx.author.id}>. Wrong command. Please use `!help` to get list of supported commands")
         return
     raise error
 
