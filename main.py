@@ -74,6 +74,12 @@ async def claim(ctx,username=''):
         await ctx.send(f"Hello <@{ctx.author.id}>. Username exists. Please choose another username")
         return
     
+    # Check if anyone has this username reserveed
+    user = await User.find_one({"user_name": username})
+    if user is not None:
+        await ctx.send(f"Hello <@{ctx.author.id}>. '{username}' is already claimed by another user. Please choose another one")
+        return
+    
     # Check against the db
     user = await User.find_one({"user_id": ctx.author.id})
     if user is not None:
