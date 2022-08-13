@@ -14,7 +14,7 @@ import re
 
 load_dotenv()
 _mongo_client = AsyncIOMotorClient(os.getenv('DB_PATH'))
-_db =  _mongo_client.newDB
+_db = _mongo_client[os.getenv('DB_NAME')]
 instance = MotorAsyncIOInstance(_db)
 client = commands.Bot(command_prefix=os.getenv('CMD_PREFIX'), intents = discord.Intents().all())
 
@@ -74,8 +74,6 @@ async def claim(ctx,username=''):
         await ctx.send(f"Hello <@{ctx.author.id}>. Username exists. Please choose another username")
         return
     
-    
-    
     # Check against the db
     user = await User.find_one({"user_id": ctx.author.id})
     if user is not None:
@@ -85,8 +83,7 @@ async def claim(ctx,username=''):
             await ctx.send(f"Hello <@{ctx.author.id}>. You already claimed {user.user_name}. You can not claim more accounts")
         
         return
-    
-    
+      
     # Check if anyone has this username reserveed
     user = await User.find_one({"user_name": username})
     if user is not None:
