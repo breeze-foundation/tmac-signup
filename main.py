@@ -116,7 +116,7 @@ async def on_ready():
 @client.event
 async def on_command_error(ctx, error):
     if isinstance(error, CommandNotFound):
-        await ctx.send(f"Hello <@{ctx.author.id}>. Wrong command. Please use !help to get list of supported commands")
+        await ctx.send(f"Hello <@{ctx.author.id}>. Wrong command. Please use `!help` to get list of supported commands")
         return
     raise error
 
