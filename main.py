@@ -12,7 +12,7 @@ import os
 
 load_dotenv()
 _mongo_client = AsyncIOMotorClient(os.getenv('DB_PATH'))
-_db =  _mongo_client.local
+_db =  _mongo_client.newDB
 instance = MotorAsyncIOInstance(_db)
 client = commands.Bot(command_prefix=os.getenv('CMD_PREFIX'), intents = discord.Intents().all())
 
