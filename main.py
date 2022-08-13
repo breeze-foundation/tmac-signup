@@ -2,13 +2,15 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from umongo import Document, fields
 from umongo.frameworks import MotorAsyncIOInstance
 
+from datetime import datetime
 import discord
 from discord.ext import commands
+from discord.ext.commands import CommandNotFound
 import secrets
 import requests
 from dotenv import load_dotenv
 import os
-
+import re
 
 load_dotenv()
 _mongo_client = AsyncIOMotorClient(os.getenv('DB_PATH'))
@@ -31,6 +33,7 @@ class User(Document):
     user_name = fields.StrField(required=True)
     user_token = fields.StrField(required=True)
     user_status = fields.IntField(required=True)
+    user_time = fields.IntField(required=True)
 
     class Meta:
         collection_name = 'accounts'
@@ -44,8 +47,8 @@ def is_username_taken(username:str):
     else:
         return False
 
-@client.command()
-async def claim(ctx,username='',*args):
+@client.command(help='Claiming a new account')
+async def claim(ctx,username=''):
     # if "ticket" not in ctx.message.channel.name: 
     #     return
     
@@ -54,20 +57,21 @@ async def claim(ctx,username='',*args):
     
     # validate username
     if len(username) == 0:
-        await ctx.send("Username cannot be empty")
+        await ctx.send(f"Hello <@{ctx.author.id}>. Username cannot be empty")
         return
     
     if len(username) < 5:
-        await ctx.send("Username should be 5 or more characters")
+        await ctx.send(f"Hello <@{ctx.author.id}>. Username should be 5 or more characters")
         return
     
-    if username.isalnum() == False:
-        await ctx.send("Username should only contain alpha-numeric characters")
+    match = re.match("^[A-Za-z0-9-]*$", username)
+    if match is None:
+        await ctx.send(f"Hello <@{ctx.author.id}>. Username should only contain alpha-numeric characters and/or dashes")
         return
 
     # check if username is already taken or not
     if is_username_taken(username) == True:
-        await ctx.send("Username exists. Please choose another username")
+        await ctx.send(f"Hello <@{ctx.author.id}>. Username exists. Please choose another username")
         return
     
     # Check against the db
@@ -85,16 +89,25 @@ async def claim(ctx,username='',*args):
         user_name = username,
         user_id = ctx.author.id,
         user_token = activation_token,
-        user_status = 0
+        user_status = 0,
+        user_time = int(datetime.now().timestamp())
     )
     await user.commit()
     
     # DM user token
     discord_user = await client.fetch_user(ctx.author.id)
-    await discord_user.send(f'Hello\nHere is your activation token {activation_token}')
+    await discord_user.send(f'Hello <@{ctx.author.id}>. \nHere is your activation token {activation_token}')
 
 @client.event
 async def on_ready():
     print("I'm ready")
+
+@client.event
+async def on_command_error(ctx, error):
+    if isinstance(error, CommandNotFound):
+        await ctx.send(f"Hello <@{ctx.author.id}>. Wrong command. Please use !help to get list of supported commands")
+        return
+    raise error
+
 
 client.run(os.getenv('BOT_TOKEN'))
