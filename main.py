@@ -71,7 +71,7 @@ async def claim(ctx,username=''):
 
     # check if username is already taken or not
     if is_username_taken(username) == True:
-        await ctx.send(f"Hello <@{ctx.author.id}>. Username exists. Please choose another username")
+        await ctx.send(f"Hello <@{ctx.author.id}>. This username `{username}` is already registered. Please choose another username")
         return
     
     
