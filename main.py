@@ -33,7 +33,7 @@ class User(Document):
     user_name = fields.StrField(required=True)
     user_token = fields.StrField(required=True)
     user_status = fields.IntField(required=True)
-    user_time = fields.IntField(required=True)
+    #user_time = fields.IntField(required=True)
     createdAt = fields.IntField(required=True)
 
     class Meta:
