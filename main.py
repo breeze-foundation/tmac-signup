@@ -34,7 +34,7 @@ class User(Document):
     user_token = fields.StrField(required=True)
     user_status = fields.IntField(required=True)
     #user_time = fields.IntField(required=True)
-    createdAt = fields.StrField(required=True)
+    createdAt = fields.DateTimeField(required=True)
 
     class Meta:
         collection_name = 'accounts'
