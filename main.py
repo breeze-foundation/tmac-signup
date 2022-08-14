@@ -33,7 +33,7 @@ class User(Document):
     user_name = fields.StrField(required=True)
     user_token = fields.StrField(required=True)
     user_status = fields.IntField(required=True)
-    user_time = fields.IntField(required=True)
+    #user_time = fields.IntField(required=True)
 
     class Meta:
         collection_name = 'accounts'
@@ -97,7 +97,8 @@ async def claim(ctx,username=''):
         user_id = ctx.author.id,
         user_token = activation_token,
         user_status = 0,
-        user_time = int(datetime.now().timestamp())
+        #user_time = int(datetime.now().timestamp())
+        createdAt = datetime.now()
     )
     await user.commit()
     
