@@ -97,7 +97,8 @@ async def claim(ctx,username=''):
         user_id = ctx.author.id,
         user_token = activation_token,
         user_status = 0,
-        user_time = int(datetime.now().timestamp())
+        #user_time = int(datetime.now().timestamp())
+        user_time = datetime.now()
     )
     await user.commit()
     
