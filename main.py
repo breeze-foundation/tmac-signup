@@ -56,6 +56,7 @@ async def claim(ctx,username=''):
         return
     
     # validate username
+	username = username.lower()
     if len(username) == 0:
         await ctx.send(f"Hello <@{ctx.author.id}>. Username cannot be empty")
         return
